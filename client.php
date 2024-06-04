@@ -3,19 +3,13 @@
 /**
  * KrmPesan PHP SDK.
  *
- * @version     3.0.0
+ * @version     3.1.0
  *
- * @see         https://github.com/KrmPesan/SDK-PHP
+ * @see         https://github.com/KrmPesan/SDK-PHP5
  *
  * @author      KrmPesan <support@krmpesan.com>
- * @copyright   2023 KrmPesan
+ * @copyright   2024 KrmPesan
  */
-
-namespace KrmPesan;
-
-use DateTime;
-use DateTimeZone;
-use Exception;
 
 /**
  * KrmPesan Client Class For Handle REST API Request.
@@ -184,8 +178,6 @@ class Client
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
         } elseif ($type == 'DELETE') {
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
-        } else {
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
         }
 
         // running curl
@@ -579,7 +571,7 @@ class Client
         }
 
         $url = $resp['data']['url'];
-        $urlClean = explode('?', $url)[0];
+        list($urlClean) = explode('?', $url);
 
         // Create a cURL handle
         $curl = curl_init();

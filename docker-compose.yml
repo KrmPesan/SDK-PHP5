@@ -1,0 +1,9 @@
+services:
+  php:
+    build: .
+    ports:
+      - "9000:80"
+    volumes:
+      - ./client.php:/var/www/html/client.php
+      - ./example/:/var/www/html/example/
+      # - ./php.ini:/usr/local/lib/php.ini
