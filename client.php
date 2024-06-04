@@ -129,7 +129,7 @@ class Client
         }
 
         // Set Custom Header
-        $this->customHeader = $data['headers'] ?? null;
+        $this->customHeader = isset($data['headers']) ? $data['headers'] : null;
 
         // validate token
         $this->validateToken();
@@ -148,7 +148,7 @@ class Client
         $buildUrl = $this->apiUrl.'/'.$url;
 
         // set default header
-        $headers = [];
+        $headers = array();
         $headers[] = 'Content-Type: application/json';
         $headers[] = 'Authorization: Bearer '.$this->token;
 
@@ -237,7 +237,6 @@ class Client
         if (isset($this->tokenFile) and !empty($this->tokenFile)) {
             $getFile = file_get_contents($this->tokenFile);
             $parseFile = json_decode($getFile, true);
-
             $refreshToken = isset($parseFile['refreshToken']) ? $parseFile['refreshToken'] : null;
             $deviceId = isset($parseFile['deviceId']) ? $parseFile['deviceId'] : null;
             $idToken = isset($parseFile['idToken']) ? $parseFile['idToken'] : null;
@@ -265,11 +264,11 @@ class Client
             }
         }
 
-        $result = [
+        $result = array(
             'idToken'      => $this->token,
             'refreshToken' => $this->refreshToken,
             'expiredAt'    => $this->expiredAt,
-        ];
+        );
 
         return $result;
     }
@@ -320,11 +319,11 @@ class Client
     public function createTemplate($name, $category, $description)
     {
         // build form
-        $form = json_encode([
+        $form = json_encode(array(
             'name'        => $name,
             'category'    => $category,
             'description' => $description,
-        ]);
+        ));
 
         return $this->request('POST', 'messages/template', $form);
     }
@@ -346,7 +345,7 @@ class Client
     public function createTemplateLang($slug, $lang, $message, $fields, $header = null, $footer = null, $button = null)
     {
         // build form
-        $form = json_encode([
+        $form = json_encode(array(
             'slug'     => $slug,
             'language' => $lang,
             'message'  => $message,
@@ -354,7 +353,7 @@ class Client
             'header'   => isset($header) ? $header : null,
             'footer'   => isset($footer) ? $footer : null,
             'button'   => isset($button) ? $button : null,
-        ]);
+        ));
 
         return $this->request('POST', 'messages/template/lang', $form);
     }
@@ -372,14 +371,14 @@ class Client
     public function sendMessageTemplateText($to, $templateName, $templateLanguage, $body)
     {
         // build form
-        $form = json_encode([
+        $form = json_encode(array(
             'phone'             => $to,
             'template_name'     => $templateName,
             'template_language' => $templateLanguage,
-            'template'          => (object) [
+            'template'          => (object) array(
                 'body' => $body,
-            ],
-        ]);
+            ),
+        ));
 
         return $this->request('POST', 'messages', $form);
     }
@@ -398,18 +397,18 @@ class Client
     public function sendMessageTemplateImage($to, $templateName, $templateLanguage, $body, $image)
     {
         // build form
-        $form = json_encode([
+        $form = json_encode(array(
             'phone'             => $to,
             'template_name'     => $templateName,
             'template_language' => $templateLanguage,
-            'template'          => (object) [
+            'template'          => (object) array(
                 'body'   => $body,
-                'header' => [
+                'header' => array(
                     'type' => 'image',
                     'url'  => $image,
-                ],
-            ],
-        ]);
+                ),
+            ),
+        ));
 
         return $this->request('POST', 'messages', $form);
     }
@@ -428,18 +427,18 @@ class Client
     public function sendMessageTemplateDocument($to, $templateName, $templateLanguage, $body, $document)
     {
         // build form
-        $form = json_encode([
+        $form = json_encode(array(
             'phone'             => $to,
             'template_name'     => $templateName,
             'template_language' => $templateLanguage,
-            'template'          => (object) [
+            'template'          => (object) array(
                 'body'   => $body,
-                'header' => [
+                'header' => array(
                     'type' => 'document',
                     'url'  => $document,
-                ],
-            ],
-        ]);
+                ),
+            ),
+        ));
 
         return $this->request('POST', 'messages', $form);
     }
@@ -458,17 +457,17 @@ class Client
     public function sendMessageTemplateButton($to, $templateName, $templateLanguage, $body, $button)
     {
         // build form
-        $form = json_encode([
+        $form = json_encode(array(
             'phone'             => $to,
             'template_name'     => $templateName,
             'template_language' => $templateLanguage,
-            'template'          => (object) [
+            'template'          => (object) array(
                 'body'    => $body,
-                'buttons' => [
+                'buttons' => array(
                     'url'  => $button,
-                ],
-            ],
-        ]);
+                ),
+            ),
+        ));
 
         return $this->request('POST', 'messages', $form);
     }
@@ -484,13 +483,13 @@ class Client
     public function sendReplyText($to, $text)
     {
         // build form
-        $form = json_encode([
+        $form = json_encode(array(
             'phone' => $to,
-            'reply' => (object) [
+            'reply' => (object) array(
                 'type' => 'text',
                 'text' => $text,
-            ],
-        ]);
+            ),
+        ));
 
         return $this->request('POST', 'messages', $form);
     }
@@ -507,14 +506,14 @@ class Client
     public function sendReplyImage($to, $image, $caption = '')
     {
         // build form
-        $form = json_encode([
+        $form = json_encode(array(
             'phone' => $to,
-            'reply' => (object) [
+            'reply' => (object) array(
                 'type'    => 'image',
                 'image'   => $image,
                 'caption' => $caption,
-            ],
-        ]);
+            ),
+        ));
 
         return $this->request('POST', 'messages', $form);
     }
@@ -530,13 +529,13 @@ class Client
     public function sendReplyDocument($to, $document)
     {
         // build form
-        $form = json_encode([
+        $form = json_encode(array(
             'phone' => $to,
-            'reply' => (object) [
+            'reply' => (object) array(
                 'type'       => 'image',
                 'document'   => $document,
-            ],
-        ]);
+            ),
+        ));
 
         return $this->request('POST', 'messages', $form);
     }
@@ -567,11 +566,11 @@ class Client
         // https://www.php.net/manual/en/function.mime-content-type
         $filemime = mime_content_type($file);
 
-        $presign = $this->request('POST', 'files/generate', json_encode([
+        $presign = $this->request('POST', 'files/generate', json_encode(array(
             'filename' => $filename,
             'mime'     => $filemime,
             'expired'  => 30,
-        ]));
+        )));
 
         $resp = json_decode($presign, true);
 
@@ -593,7 +592,7 @@ class Client
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_INFILE, fopen($fileData, 'r'));
         curl_setopt($curl, CURLOPT_INFILESIZE, filesize($fileData));
-        curl_setopt($curl, CURLOPT_HTTPHEADER, ["Content-Type: $filemime"]);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type: $filemime"));
 
         // Execute the cURL request
         $response = curl_exec($curl);
